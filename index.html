@@ -103,7 +103,7 @@
             }
         }
 
-        /* الجانب الأيسر: المعرض الفاخر */
+        /* الجانب الأيسر: نظام المعرض المطور (صور + فيديو) */
         .gallery-container {
             position: sticky;
             top: 130px;
@@ -118,18 +118,65 @@
             border: 1px solid var(--glass-border);
             box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 50px rgba(124, 58, 237, 0.05);
             background: #000;
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 16 / 10;
         }
 
-        .main-preview-box img {
+        .main-preview-box img, .main-preview-box video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: none;
         }
 
-        .main-preview-box:hover img {
-            transform: scale(1.03);
+        .main-preview-box .active-media {
+            display: block;
+        }
+
+        /* أزرار التنقل المصغرة أسفل المعرض */
+        .thumbnail-bar {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            justify-content: flex-start;
+        }
+
+        .thumb {
+            width: 70px;
+            height: 50px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            cursor: pointer;
+            background: #000;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.5;
+        }
+
+        .thumb.active-thumb {
+            border-color: var(--glow-purple);
+        }
+
+        .thumb.active-thumb img {
+            opacity: 1;
+        }
+
+        /* علامة الفيديو على المصغرة */
+        .thumb-video-badge::after {
+            content: '▶';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFF;
+            font-size: 14px;
+            text-shadow: 0 0 5px #000;
         }
 
         /* الجانب الأيمن: تفاصيل الشراء المصممة بأسلوب الزجاج */
@@ -188,7 +235,6 @@
             font-size: 34px;
             font-weight: 800;
             color: #FFF;
-            position: relative;
         }
 
         .slashed-price {
@@ -205,7 +251,7 @@
             line-height: 1.8;
         }
 
-        /* محرك حساب الشحن الذكي والمخفي */
+        /* كروت الخيارات الفاخرة */
         .luxury-card {
             background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.05);
@@ -276,7 +322,7 @@
             text-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
         }
 
-        /* نظام الدفع الفاخر فائق التجاوب */
+        /* نظام الدفع الفاخر */
         .action-stack {
             display: flex;
             flex-direction: column;
@@ -302,7 +348,7 @@
         #apple-pay-trigger {
             background-color: #FFFFFF;
             color: #000000;
-            display: none; /* يتفعل ذكياً عبر الـ JS للآيفون */
+            display: none;
         }
 
         #apple-pay-trigger:hover {
@@ -315,7 +361,7 @@
             background-color: #000000;
             color: #FFFFFF;
             border: 1px solid rgba(255,255,255,0.15);
-            display: none; /* يتفعل ذكياً عبر الـ JS للأندرويد */
+            display: none;
         }
 
         #google-pay-trigger:hover {
@@ -348,12 +394,6 @@
             padding-top: 25px;
             opacity: 0.8;
         }
-
-        .trust-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
     </style>
 </head>
 <body>
@@ -367,15 +407,37 @@
     </header>
 
     <div class="main-wrapper">
-        <!-- الجانب الأيسر: عرض المنتج الفخم -->
+        <!-- الجانب الأيسر: المعرض الذكي المحتوي على صور حقيقية وفيديو مدمج -->
         <div class="gallery-container">
             <div class="main-preview-box">
-                <!-- صورة سينمائية مبهرة وعالية الجودة متوافقة مع الثيم -->
-                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1200&auto=format&fit=crop" alt="Premium Cosmic Projector">
+                <!-- العنصر 0: فيديو المنتج الفخم المستضاف (شغال تلقائي صامت) -->
+                <video id="media-0" class="active-media" autoplay loop muted playsinline controls>
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-nebula-in-outer-space-40292-large.mp4" type="video/mp4">
+                </video>
+                <!-- العنصر 1: صور المنتج الاحترافية عالية الجودة -->
+                <img id="media-1" src="https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=1200&auto=format&fit=crop" alt="Star Projector Effect 1">
+                <img id="media-2" src="https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?q=80&w=1200&auto=format&fit=crop" alt="Star Projector Effect 2">
+                <img id="media-3" src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1200&auto=format&fit=crop" alt="Product Setup CloseUp">
+            </div>
+
+            <!-- البار السفلي للتبديل السريع بلمسة واحدة للزبون -->
+            <div class="thumbnail-bar">
+                <div class="thumb active-thumb thumb-video-badge" onclick="switchMedia(0)">
+                    <img src="https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=150" alt="Video Thumb">
+                </div>
+                <div class="thumb" onclick="switchMedia(1)">
+                    <img src="https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=150" alt="Thumb 1">
+                </div>
+                <div class="thumb" onclick="switchMedia(2)">
+                    <img src="https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?q=80&w=150" alt="Thumb 2">
+                </div>
+                <div class="thumb" onclick="switchMedia(3)">
+                    <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=150" alt="Thumb 3">
+                </div>
             </div>
         </div>
 
-        <!-- الجانب الأيمن: لوحة التحكم والطلب والذكاء المالي -->
+        <!-- الجانب الأيمن: تفاصيل الشراء والطلب -->
         <div class="product-info-panel">
             <div class="premium-tag">Collection 2026 // Limited Edition</div>
             <h1>جهاز عرض النجوم المجسم المحيطي</h1>
@@ -386,14 +448,11 @@
             </div>
 
             <p class="product-bio">
-                ارتقِ بأبعاد غرفتك أو سيارتك إلى فضاء سينمائي ساحر. يعمل بنظام ليزر مصفوفي متطور فائق النقاء لإسقاط النجوم والمجرات المحيطية المهدئة للأعصاب، مع تحكم ذكي كامل ومستشعرات صوتية مدمجة للتوافق التلقائي مع الأجواء.
+                ارتقِ بأبعاد غرفتك أو سيارتك إلى فضاء سينمائي ساحر. يعمل بنظام ليزر مصفوفي متطور فائق النقاء لإسقاط النجوم والمجرات المحيطية المهدئة للأعصاب، مع تحكم ذكي كامل ومستشعرات صوتية مدمجة للتوافق التلقائي مع الأجواء المحيطة.
             </p>
 
-            <!-- كرت حساب الشحن والربح التلقائي المضاف إليه الـ 10$ تلقائياً -->
             <div class="luxury-card">
-                <div class="card-label">
-                    <span>📍</span> حدد دولة الوجهة لحساب تكلفة التوصيل المؤمن:
-                </div>
+                <div class="card-label">📍 حدد دولة الوجهة لحساب تكلفة التوصيل المؤمن:</div>
                 <div class="select-wrapper">
                     <select id="country-selector" onchange="calculateShipping()">
                         <option value="JO">الأردن (Jordan)</option>
@@ -403,48 +462,53 @@
                         <option value="US">الولايات المتحدة الأمريكية</option>
                     </select>
                 </div>
-
                 <div class="shipping-output">
                     <span>الشحن الدولي المؤمن (تغليف مخفي أعمى):</span>
                     <span class="price-highlight" id="shipping-cost">$0.00</span>
                 </div>
             </div>
 
-            <!-- أزرار الدفع الديناميكية والذكية المتجاوبة -->
             <div class="action-stack">
-                <!-- زر Apple Pay الفاخر (يظهر تلقائياً لمستخدمي الآيفون فقط) -->
                 <button class="premium-btn" id="apple-pay-trigger" onclick="triggerTapPayment('Apple Pay')">
                      Pay شراء فوري آمن
                 </button>
-
-                <!-- زر Google Pay الاحترافي (يظهر تلقائياً لمستخدمي الأندرويد فقط) -->
                 <button class="premium-btn" id="google-pay-trigger" onclick="triggerTapPayment('Google Pay')">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="margin-left:5px;"><path d="M21.5 12.3c0-.7-.1-1.4-.2-2H12v3.9h5.3c-.2 1.2-.9 2.2-1.9 2.9v2.4h3.1c1.8-1.7 2.9-4.2 2.9-7.2z" fill="#4285F4"/><path d="M12 22c2.7 0 5-1 6.7-2.6l-3.1-2.4c-.9.6-2 .9-3.6.9-2.7 0-5-1.9-5.9-4.4H3v2.5C4.7 19.9 8.1 22 12 22z" fill="#34A853"/><path d="M6.1 13.5c-.2-.6-.4-1.3-.4-2s.1-1.4.4-2V7H3a9 9 0 0 0 0 10l3.1-2.5z" fill="#FBBC05"/><path d="M12 5.4c1.5 0 2.8.5 3.9 1.5l2.9-2.9C17 2.4 14.7 1.5 12 1.5 8.1 1.5 4.7 3.6 3 7.1l3.1 2.5c.9-2.5 3.2-4.2 5.9-4.2z" fill="#EA4335"/></svg>
                     شراء سريع عبر G Pay
                 </button>
-
-                <!-- زر البطاقات الائتمانية العالمي المصمم بوهج متدرج فخم -->
                 <button class="premium-btn master-checkout-btn" onclick="triggerTapPayment('Credit Card')">
                     الدفع الآمن بواسطة بطاقة الائتمان (Visa / Mastercard)
                 </button>
             </div>
 
-            <!-- عناصر الموثوقية الفاخرة لزيادة معدل التحويل للمشتري -->
             <div class="trust-footer">
-                <div class="trust-item">🛡️ تشفير SSL كامل</div>
-                <div class="trust-item">💳 معالجة برعاية Tap Payments</div>
-                <div class="trust-item">📦 شحن أعمى مصمت</div>
+                <div>🛡️ تشفير SSL كامل</div>
+                <div>💳 معالجة عبر Tap Payments</div>
+                <div>📦 شحن أعمى مصمت</div>
             </div>
         </div>
     </div>
 
     <script>
-        /* 1. محرك خلفية جزيئات النجوم والمجرات التفاعلية والمتحركة */
+        /* دالة التبديل الذكي بين صور وفيديو المنتج */
+        function switchMedia(index) {
+            // إخفاء كل الوسائط
+            for (let i = 0; i <= 3; i++) {
+                document.getElementById(`media-${i}`).classList.remove('active-media');
+            }
+            // إظهار العنصر المختار
+            document.getElementById(`media-${index}`).classList.add('active-media');
+
+            // تحديث تصميم الأزرار المصغرة النشطة
+            const thumbs = document.querySelectorAll('.thumb');
+            thumbs.forEach(t => t.classList.remove('active-thumb'));
+            thumbs[index].classList.add('active-thumb');
+        }
+
+        /* محرك خلفية جزيئات النجوم */
         const canvas = document.getElementById('ambient-canvas');
         const ctx = canvas.getContext('2d');
-
         let particles = [];
-        const particleCount = 65;
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -454,9 +518,7 @@
         resizeCanvas();
 
         class Particle {
-            constructor() {
-                this.reset();
-            }
+            constructor() { this.reset(); }
             reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
@@ -471,76 +533,47 @@
                 this.x += this.speedX;
                 this.y += this.speedY;
                 this.opacity += this.fadeSpeed * this.direction;
-
-                if (this.opacity > 0.8 || this.opacity < 0.1) {
-                    this.direction *= -1;
-                }
-
-                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-                    this.reset();
-                }
+                if (this.opacity > 0.8 || this.opacity < 0.1) this.direction *= -1;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
             }
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(124, 58, 237, ${this.opacity})`; // توهج بنفسجي ناعم جداً كالنجوم
+                ctx.fillStyle = `rgba(124, 58, 237, ${this.opacity})`;
                 ctx.fill();
             }
         }
 
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
-
+        for (let i = 0; i < 65; i++) particles.push(new Particle());
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
+            particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animate);
         }
         animate();
 
-        /* 2. منطق الحساب المالي الآمن والربح المضاف ($10 ثابتة) */
-        const shippingRatesCache = {
-            "JO": 4.50 + 10.00,
-            "PS": 5.00 + 10.00,
-            "SA": 3.00 + 10.00,
-            "AE": 2.50 + 10.00,
-            "US": 1.50 + 10.00
-        };
-
+        /* نظام الشحن والدفع التلقائي */
+        const shippingRatesCache = { "JO": 14.50, "PS": 15.00, "SA": 13.00, "AE": 12.50, "US": 11.50 };
         function calculateShipping() {
             const country = document.getElementById('country-selector').value;
-            const finalShippingCost = shippingRatesCache[country] || (5.00 + 10.00);
+            const finalShippingCost = shippingRatesCache[country] || 15.00;
             document.getElementById('shipping-cost').innerText = `$${finalShippingCost.toFixed(2)}`;
         }
 
-        /* 3. استشعار البيئة ونوع الجهاز لفتح نظام الدفع المناسب والمثير للزبون */
         function adjustCheckoutExperience() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            const applePayBtn = document.getElementById('apple-pay-trigger');
-            const googlePayBtn = document.getElementById('google-pay-trigger');
-
             if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                applePayBtn.style.display = 'flex';
+                document.getElementById('apple-pay-trigger').style.display = 'flex';
             } else if (/android/i.test(userAgent)) {
-                googlePayBtn.style.display = 'flex';
-            } else {
-                applePayBtn.style.display = 'none';
-                googlePayBtn.style.display = 'none';
+                document.getElementById('google-pay-trigger').style.display = 'flex';
             }
         }
 
         function triggerTapPayment(method) {
-            alert(`سيتم توجيهك الآن لإتمام العملية الآمنة الفاخرة عبر [${method}] باستخدام بوابة Tap Payments الرسمية.\n\n(الموقع جاهز برمجياً وهندسيًا للربط بـ API Keys الخاصة بك لاحقاً).`);
+            alert(`سيتم توجيهك الآن لإتمام العملية الآمنة عبر [${method}] باستخدام بوابة Tap Payments.\n\n(الموقع جاهز برمجياً للربط لاحقاً).`);
         }
 
-        window.onload = function() {
-            calculateShipping();
-            adjustCheckoutExperience();
-        };
+        window.onload = function() { calculateShipping(); adjustCheckoutExperience(); };
     </script>
 </body>
 </html>
