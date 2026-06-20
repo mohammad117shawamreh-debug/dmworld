@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DM WORLD | Official Premium Store</title>
+    <style>
+        /* نظام الألوان الفخم - Dark Neon Luxury 2026 */
+        :root {
+            --bg-ultra-dark: #050505;
+            --glass-bg: rgba(18, 18, 18, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glow-purple: #7C3AED;
+            --glow-blue: #2563EB;
+            --text-pure: #FFFFFF;
+            --text-secondary: #9CA3AF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-ultra-dark);
+            color: var(--text-pure);
+            overflow-x: hidden;
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* جزيئات النجوم المتحركة في الخلفية */
+        #ambient-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* الهيدر الزجاجي المعلق */
+        header {
+            background: rgba(5, 5, 5, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 25px 8%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-logo {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #FFF 30%, var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255,255,255,0.05);
+        }
+
+        .header-badge {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #10B981;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* الحاوية الرئيسية المتجاوبة */
+        .main-wrapper {
+            margin-top: 130px;
+            margin-bottom: 60px;
+            padding: 0 8%;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            max-width: 1500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 992px) {
+            .main-wrapper {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                padding: 0 5%;
+                margin-top: 110px;
+            }
+        }
+
+        /* الجانب الأيسر: المعرض الفاخر */
+        .gallery-container {
+            position: sticky;
+            top: 130px;
+            height: fit-content;
+        }
+
+        .main-preview-box {
+            position: relative;
+            width: 100%;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 50px rgba(124, 58, 237, 0.05);
+            background: #000;
+            aspect-ratio: 1 / 1;
+        }
+
+        .main-preview-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .main-preview-box:hover img {
+            transform: scale(1.03);
+        }
+
+        /* الجانب الأيمن: تفاصيل الشراء المصممة بأسلوب الزجاج */
+        .product-info-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        @media (max-width: 480px) {
+            .product-info-panel {
+                padding: 25px;
+            }
+        }
+
+        .premium-tag {
+            background: linear-gradient(90deg, rgba(124, 58, 237, 0.2), rgba(37, 99, 233, 0.2));
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            color: #C084FC;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            width: fit-content;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(180deg, #FFF 60%, #9CA3AF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 30px; }
+        }
+
+        .price-architecture {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .current-price {
+            font-size: 34px;
+            font-weight: 800;
+            color: #FFF;
+            position: relative;
+        }
+
+        .slashed-price {
+            font-size: 20px;
+            color: var(--text-secondary);
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .product-bio {
+            color: var(--text-secondary);
+            margin-bottom: 35px;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        /* محرك حساب الشحن الذكي والمخفي */
+        .luxury-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 35px;
+            transition: border-color 0.3s;
+        }
+
+        .luxury-card:focus-within {
+            border-color: rgba(124, 58, 237, 0.4);
+        }
+
+        .card-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 15px;
+            background: #0F0F0F;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #FFF;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper::after {
+            content: '▼';
+            font-size: 10px;
+            color: var(--text-secondary);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .shipping-output {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+        }
+
+        .price-highlight {
+            color: #10B981;
+            font-weight: 700;
+            font-size: 18px;
+            text-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+        }
+
+        /* نظام الدفع الفاخر فائق التجاوب */
+        .action-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .premium-btn {
+            width: 100%;
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        #apple-pay-trigger {
+            background-color: #FFFFFF;
+            color: #000000;
+            display: none; /* يتفعل ذكياً عبر الـ JS للآيفون */
+        }
+
+        #apple-pay-trigger:hover {
+            background-color: #F3F4F6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.15);
+        }
+
+        #google-pay-trigger {
+            background-color: #000000;
+            color: #FFFFFF;
+            border: 1px solid rgba(255,255,255,0.15);
+            display: none; /* يتفعل ذكياً عبر الـ JS للأندرويد */
+        }
+
+        #google-pay-trigger:hover {
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .master-checkout-btn {
+            background: linear-gradient(135deg, var(--glow-purple), #4C1D95);
+            color: #FFF;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+        }
+
+        .master-checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(124, 58, 237, 0.5);
+        }
+
+        /* شارات الأمان السفلية */
+        .trust-footer {
+            margin-top: 35px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--glass-border);
+            padding-top: 25px;
+            opacity: 0.8;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- كانفاس محرك النجوم التفاعلية في الخلفية -->
+    <canvas id="ambient-canvas"></canvas>
+
+    <header>
+        <div class="brand-logo">DM WORLD</div>
+        <div class="header-badge">Secure Encryption Active</div>
+    </header>
+
+    <div class="main-wrapper">
+        <!-- الجانب الأيسر: عرض المنتج الفخم -->
+        <div class="gallery-container">
+            <div class="main-preview-box">
+                <!-- صورة سينمائية مبهرة وعالية الجودة متوافقة مع الثيم -->
+                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1200&auto=format&fit=crop" alt="Premium Cosmic Projector">
+            </div>
+        </div>
+
+        <!-- الجانب الأيمن: لوحة التحكم والطلب والذكاء المالي -->
+        <div class="product-info-panel">
+            <div class="premium-tag">Collection 2026 // Limited Edition</div>
+            <h1>جهاز عرض النجوم المجسم المحيطي</h1>
+            
+            <div class="price-architecture">
+                <span class="current-price">$29.99</span>
+                <span class="slashed-price">$59.99</span>
+            </div>
+
+            <p class="product-bio">
+                ارتقِ بأبعاد غرفتك أو سيارتك إلى فضاء سينمائي ساحر. يعمل بنظام ليزر مصفوفي متطور فائق النقاء لإسقاط النجوم والمجرات المحيطية المهدئة للأعصاب، مع تحكم ذكي كامل ومستشعرات صوتية مدمجة للتوافق التلقائي مع الأجواء.
+            </p>
+
+            <!-- كرت حساب الشحن والربح التلقائي المضاف إليه الـ 10$ تلقائياً -->
+            <div class="luxury-card">
+                <div class="card-label">
+                    <span>📍</span> حدد دولة الوجهة لحساب تكلفة التوصيل المؤمن:
+                </div>
+                <div class="select-wrapper">
+                    <select id="country-selector" onchange="calculateShipping()">
+                        <option value="JO">الأردن (Jordan)</option>
+                        <option value="PS">فلسطين (Palestine)</option>
+                        <option value="SA">المملكة العربية السعودية</option>
+                        <option value="AE">الإمارات العربية المتحدة</option>
+                        <option value="US">الولايات المتحدة الأمريكية</option>
+                    </select>
+                </div>
+
+                <div class="shipping-output">
+                    <span>الشحن الدولي المؤمن (تغليف مخفي أعمى):</span>
+                    <span class="price-highlight" id="shipping-cost">$0.00</span>
+                </div>
+            </div>
+
+            <!-- أزرار الدفع الديناميكية والذكية المتجاوبة -->
+            <div class="action-stack">
+                <!-- زر Apple Pay الفاخر (يظهر تلقائياً لمستخدمي الآيفون فقط) -->
+                <button class="premium-btn" id="apple-pay-trigger" onclick="triggerTapPayment('Apple Pay')">
+                     Pay شراء فوري آمن
+                </button>
+
+                <!-- زر Google Pay الاحترافي (يظهر تلقائياً لمستخدمي الأندرويد فقط) -->
+                <button class="premium-btn" id="google-pay-trigger" onclick="triggerTapPayment('Google Pay')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="margin-left:5px;"><path d="M21.5 12.3c0-.7-.1-1.4-.2-2H12v3.9h5.3c-.2 1.2-.9 2.2-1.9 2.9v2.4h3.1c1.8-1.7 2.9-4.2 2.9-7.2z" fill="#4285F4"/><path d="M12 22c2.7 0 5-1 6.7-2.6l-3.1-2.4c-.9.6-2 .9-3.6.9-2.7 0-5-1.9-5.9-4.4H3v2.5C4.7 19.9 8.1 22 12 22z" fill="#34A853"/><path d="M6.1 13.5c-.2-.6-.4-1.3-.4-2s.1-1.4.4-2V7H3a9 9 0 0 0 0 10l3.1-2.5z" fill="#FBBC05"/><path d="M12 5.4c1.5 0 2.8.5 3.9 1.5l2.9-2.9C17 2.4 14.7 1.5 12 1.5 8.1 1.5 4.7 3.6 3 7.1l3.1 2.5c.9-2.5 3.2-4.2 5.9-4.2z" fill="#EA4335"/></svg>
+                    شراء سريع عبر G Pay
+                </button>
+
+                <!-- زر البطاقات الائتمانية العالمي المصمم بوهج متدرج فخم -->
+                <button class="premium-btn master-checkout-btn" onclick="triggerTapPayment('Credit Card')">
+                    الدفع الآمن بواسطة بطاقة الائتمان (Visa / Mastercard)
+                </button>
+            </div>
+
+            <!-- عناصر الموثوقية الفاخرة لزيادة معدل التحويل للمشتري -->
+            <div class="trust-footer">
+                <div class="trust-item">🛡️ تشفير SSL كامل</div>
+                <div class="trust-item">💳 معالجة برعاية Tap Payments</div>
+                <div class="trust-item">📦 شحن أعمى مصمت</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* 1. محرك خلفية جزيئات النجوم والمجرات التفاعلية والمتحركة */
+        const canvas = document.getElementById('ambient-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        const particleCount = 65;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.radius = Math.random() * 1.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.2;
+                this.speedY = (Math.random() - 0.5) * 0.2;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.fadeSpeed = Math.random() * 0.005 + 0.002;
+                this.direction = Math.random() > 0.5 ? 1 : -1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.opacity += this.fadeSpeed * this.direction;
+
+                if (this.opacity > 0.8 || this.opacity < 0.1) {
+                    this.direction *= -1;
+                }
+
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(124, 58, 237, ${this.opacity})`; // توهج بنفسجي ناعم جداً كالنجوم
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        /* 2. منطق الحساب المالي الآمن والربح المضاف ($10 ثابتة) */
+        const shippingRatesCache = {
+            "JO": 4.50 + 10.00,
+            "PS": 5.00 + 10.00,
+            "SA": 3.00 + 10.00,
+            "AE": 2.50 + 10.00,
+            "US": 1.50 + 10.00
+        };
+
+        function calculateShipping() {
+            const country = document.getElementById('country-selector').value;
+            const finalShippingCost = shippingRatesCache[country] || (5.00 + 10.00);
+            document.getElementById('shipping-cost').innerText = `$${finalShippingCost.toFixed(2)}`;
+        }
+
+        /* 3. استشعار البيئة ونوع الجهاز لفتح نظام الدفع المناسب والمثير للزبون */
+        function adjustCheckoutExperience() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const applePayBtn = document.getElementById('apple-pay-trigger');
+            const googlePayBtn = document.getElementById('google-pay-trigger');
+
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                applePayBtn.style.display = 'flex';
+            } else if (/android/i.test(userAgent)) {
+                googlePayBtn.style.display = 'flex';
+            } else {
+                applePayBtn.style.display = 'none';
+                googlePayBtn.style.display = 'none';
+            }
+        }
+
+        function triggerTapPayment(method) {
+            alert(`سيتم توجيهك الآن لإتمام العملية الآمنة الفاخرة عبر [${method}] باستخدام بوابة Tap Payments الرسمية.\n\n(الموقع جاهز برمجياً وهندسيًا للربط بـ API Keys الخاصة بك لاحقاً).`);
+        }
+
+        window.onload = function() {
+            calculateShipping();
+            adjustCheckoutExperience();
+        };
+    </script>
+</body>
+</html>
