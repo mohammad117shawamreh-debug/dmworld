@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DM WORLD | Official Store</title>
+    <style>
+        /* تصميم فخم وعصري 2026 - Dark Luxury Minimalist */
+        :root {
+            --bg-dark: #0B0B0B;
+            --surface-dark: #161616;
+            --accent-glow: #6D28D9; /* نيون بنفسجي خافت وراقي */
+            --accent-blue: #2563EB;
+            --text-main: #F3F4F6;
+            --text-muted: #9CA3AF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* الهيدر الفخم */
+        header {
+            background: rgba(22, 22, 22, 0.75);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #222;
+            padding: 20px 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #FFF;
+            text-shadow: 0 0 10px rgba(255,255,255,0.1);
+        }
+
+        /* صفحة العرض الواحدة (Landing Page Structure) */
+        .main-container {
+            margin-top: 100px;
+            padding: 40px 5%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 20px 5%;
+            }
+        }
+
+        /* معرض الصور الفخم */
+        .product-gallery {
+            position: relative;
+        }
+
+        .main-image {
+            width: 100%;
+            border-radius: 16px;
+            border: 1px solid #2A2A2A;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            background: #000;
+        }
+
+        /* تفاصيل المنتج */
+        .product-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .tag {
+            background: linear-gradient(90deg, var(--accent-glow), var(--accent-blue));
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            width: fit-content;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #FFF;
+        }
+
+        .price-box {
+            font-size: 28px;
+            font-weight: bold;
+            color: #FFF;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .old-price {
+            font-size: 18px;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .description {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        /* محرك حساب الشحن التلقائي والأعمى (Shipping UI) */
+        .shipping-card {
+            background: var(--surface-dark);
+            border: 1px solid #2A2A2A;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .shipping-title {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-dark);
+            border: 1px solid #333;
+            color: #FFF;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        select:focus {
+            border-color: var(--accent-glow);
+        }
+
+        .shipping-cost-display {
+            margin-top: 15px;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 500;
+        }
+
+        .cost-value {
+            color: #10B981; /* أخضر ناعم مريح للنظر */
+            font-weight: bold;
+        }
+
+        /* بوابة الدفع الذكية المتجاوبة (Smart Checkout UI) */
+        .checkout-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* زر ابل باي الفخم */
+        #apple-pay-btn {
+            background-color: #FFF;
+            color: #000;
+            display: none; /* يظهر برمجياً للآيفون فقط */
+        }
+
+        /* زر جوجل باي للأندرويد */
+        #google-pay-btn {
+            background-color: #000;
+            color: #FFF;
+            border: 1px solid #333;
+            display: none; /* يظهر برمجياً للأندرويد فقط */
+        }
+
+        .btn-credit-card {
+            background: linear-gradient(135deg, var(--accent-glow), #4C1D95);
+            color: #FFF;
+            box-shadow: 0 4px 20px rgba(109, 40, 217, 0.4);
+        }
+
+        .btn-credit-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(109, 40, 217, 0.6);
+        }
+
+        /* قسم الضمانات والأمان */
+        .security-badges {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-logo">DM WORLD</div>
+        <div style="font-size: 14px; color: var(--text-muted);">حساب شحن مؤمن ومضمون</div>
+    </header>
+
+    <div class="main-container">
+        <!-- معرض الصور الساحر للمنتج -->
+        <div class="product-gallery">
+            <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop" alt="Mini Star Projector" class="main-image">
+        </div>
+
+        <!-- تفاصيل الشراء وحساب التكلفة -->
+        <div class="product-details">
+            <div class="tag">المنتج الأكثر مبيعاً لعام 2026</div>
+            <h1>جهاز عرض النجوم المصغر ثنائي الوظائف</h1>
+            
+            <div class="price-box">
+                <span>$29.99</span>
+                <span class="old-price">$59.99</span>
+            </div>
+
+            <p class="description">
+                أضف لمسة ساحرة وفخمة لغرفتك أو سيارتك. جهاز عرض النجوم وعمل الإضاءة المحيطية بنظام ليزر متطور وصغير الحجم، يخلق أجواءً سينمائية مريحة جداً للأعصاب وهادئة للنظر.
+            </p>
+
+            <!-- كرت حساب الشحن الأعمى التلقائي بناءً على اختيار الدولة -->
+            <div class="shipping-card">
+                <div class="shipping-title">اختر بلد التوصيل لحساب الشحن التلقائي:</div>
+                <select id="country-selector" onchange="calculateShipping()">
+                    <option value="JO">الأردن (Jordan)</option>
+                    <option value="PS">فلسطين (Palestine)</option>
+                    <option value="SA">المملكة العربية السعودية</option>
+                    <option value="AE">الإمارات العربية المتحدة</option>
+                    <option value="US">الولايات المتحدة الأمريكية</option>
+                </select>
+
+                <div class="shipping-cost-display">
+                    <span>تكلفة الشحن (شامل التأمين الأعمى):</span>
+                    <span class="cost-value" id="shipping-cost">$0.00</span>
+                </div>
+                <div style="font-size: 11px; color: #10B981; margin-top: 5px;">✓ يتم التحديث تلقائياً وبسرعة كل ساعة لشحن مخفي آمن</div>
+            </div>
+
+            <!-- أزرار الدفع الذكية المتجاوبة -->
+            <div class="checkout-box">
+                <!-- زر Apple Pay (يظهر تلقائياً للآيفون) -->
+                <button class="btn-pay" id="apple-pay-btn" onclick="triggerTapPayment('Apple Pay')">
+                      Pay لشراء سريع بنقرة واحدة
+                </button>
+
+                <!-- زر Google Pay (يظهر تلقائياً للأندرويد) -->
+                <button class="btn-pay" id="google-pay-btn" onclick="triggerTapPayment('Google Pay')">
+                    G Pay الدفع السريع عبر جوجل
+                </button>
+
+                <!-- زر الفيزا والماستركارد الأساسي لجميع الأجهزة -->
+                <button class="btn-pay btn-credit-card" onclick="triggerTapPayment('Credit Card')">
+                    الدفع الآمن بواسطة بطاقة الائتمان (Visa / Mastercard)
+                </button>
+            </div>
+
+            <div class="security-badges">
+                <span>🔒 تشفير SSL آمن 200%</span>
+                <span>💳 معالجة عبر Tap Payments</span>
+                <span>📦 تغليف أعمى بدون مصدر</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* المنطق البرمجي الخاص بالمتجر */
+        
+        // محاكاة الكاش المخزن من الـ API لعلي اكسبرس المضاف إليه هامش ربحك ($10) تلقائياً
+        const shippingRatesCache = {
+            "JO": 4.50 + 10.00, // السعر الأصلي + الـ 10$ الخاصة بك
+            "PS": 5.00 + 10.00,
+            "SA": 3.00 + 10.00,
+            "AE": 2.50 + 10.00,
+            "US": 1.50 + 10.00
+        };
+
+        // دالة حساب وعرض الشحن فوراً وتلقائياً للزبون
+        function calculateShipping() {
+            const country = document.getElementById('country-selector').value;
+            const finalShippingCost = shippingRatesCache[country] || (5.00 + 10.00);
+            document.getElementById('shipping-cost').innerText = `$${finalShippingCost.toFixed(2)}`;
+        }
+
+        // دالة استشعار نظام التشغيل ونوع الجهاز لضبط الأزرار الفخمة
+        function detectDeviceAndAdjustButtons() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            
+            const applePayBtn = document.getElementById('apple-pay-btn');
+            const googlePayBtn = document.getElementById('google-pay-btn');
+
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                applePayBtn.style.display = 'flex';
+            } else if (/android/i.test(userAgent)) {
+                googlePayBtn.style.display = 'flex';
+            } else {
+                applePayBtn.style.display = 'none';
+                googlePayBtn.style.display = 'none';
+            }
+        }
+
+        // دالة معالجة الدفع والربط المستقبلي عبر Tap Payments
+        function triggerTapPayment(method) {
+            alert(`سيتم توجيهك الآن لإتمام الدفع الآمن الفاخر عبر [${method}] باستخدام بوابة Tap Payments الرسمية.\n\n(ملاحظة: الكود جاهز للربط الفوري بـ API Keys الخاصة بك في أي وقت لاحق).`);
+        }
+
+        // تشغيل الدوال تلقائياً بمجرد فتح الصفحة
+        window.onload = function() {
+            calculateShipping();
+            detectDeviceAndAdjustButtons();
+        };
+    </script>
+</body>
+</html>
